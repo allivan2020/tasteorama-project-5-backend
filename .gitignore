@@ -145,4 +145,4 @@ vite.config.ts.timestamp-*
 .vite/
 
 #Pull requests list
-pr-list.txt
+pr-list.txt.idea/

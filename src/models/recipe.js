@@ -71,8 +71,6 @@ const recipeSchema = new Schema(
   },
 )
 
-recipeSchema.index({ title: 1 })
-recipeSchema.index({ category: 1 })
-recipeSchema.index({ 'ingredients.id': 1 })
+recipeSchema.index({ title: 1, category: 1 })
 
 export const Recipe = model('Recipe', recipeSchema)

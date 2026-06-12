@@ -8,6 +8,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import recipesRoutes from './routes/recipesRoutes.js'
+import ingredientsRoutes from './routes/ingredientsRoutes.js'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(cors())
 app.use(cookieParser())
 
 app.use(recipesRoutes)
+app.use(ingredientsRoutes)
 
 app.use(notFoundHandler)
 app.use(errors())

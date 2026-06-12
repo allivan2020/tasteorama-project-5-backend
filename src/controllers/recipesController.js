@@ -36,6 +36,17 @@ export const getAllRecipes = async (req, res) => {
     recipes,
   })
 }
+
+export const getOwnRecipes = async (req, res) => {
+  const userId = req.user._id
+
+  const recipes = await Recipe.find({ owner: userId })
+
+  res.status(200).json({
+    recipes,
+  })
+}
+
 export const getFavoriteRecipes = async (req, res) => {
   const userId = req.user._id;
 

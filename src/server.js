@@ -5,11 +5,12 @@ import express from 'express'
 import { connectDB } from './db/initMongoDB.js'
 
 import authRoutes from './routes/auth.js';
+import cookieParser from 'cookie-parser';
 
 const app = express()
 
 app.use(express.json())
-
+app.use(cookieParser())
 app.use(authRoutes)
 
 const startServer = async () => {

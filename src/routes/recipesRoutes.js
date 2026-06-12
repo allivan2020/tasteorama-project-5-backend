@@ -1,10 +1,26 @@
-import { Router } from 'express'
-import { celebrate } from 'celebrate'
-import { getAllRecipesSchema } from '../validations/recipesValidation.js'
-import { getAllRecipes } from '../controllers/recipesController.js'
+import { Router } from 'express';
+import { celebrate } from 'celebrate';
 
-const router = Router()
+import {
+  getAllRecipes,
+  getFavoriteRecipes,
+} from '../controllers/recipesController.js';
 
-router.get('/recipes', celebrate(getAllRecipesSchema), getAllRecipes)
+import { getAllRecipesSchema } from '../validations/recipesValidation.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
-export default router
+const router = Router();
+
+router.get(
+  '/recipes',
+  celebrate(getAllRecipesSchema),
+  getAllRecipes,
+);
+
+router.get(
+  '/recipes/favorites',
+  authenticate,
+  getFavoriteRecipes,
+);
+
+export default router;

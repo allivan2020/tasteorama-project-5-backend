@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { celebrate } from 'celebrate';
+import { Router } from 'express'
+import { celebrate } from 'celebrate'
 
 import {
   getAllRecipes,
@@ -9,20 +9,16 @@ import {
 
 import { getAllRecipesSchema } from '../validations/recipesValidation.js';
 import { authenticate } from '../middleware/authenticate.js';
+} from '../controllers/recipesController.js'
 
-const router = Router();
+import { getAllRecipesSchema } from '../validations/recipesValidation.js'
+import { authenticate } from '../middleware/authenticate.js'
 
-router.get(
-  '/recipes',
-  celebrate(getAllRecipesSchema),
-  getAllRecipes,
-);
+const router = Router()
 
-router.get(
-  '/recipes/favorites',
-  authenticate,
-  getFavoriteRecipes,
-);
+router.get('/recipes', celebrate(getAllRecipesSchema), getAllRecipes)
+
+router.get('/recipes/favorites', authenticate, getFavoriteRecipes)
 
 router.get(
   '/recipes/own',
@@ -31,3 +27,4 @@ router.get(
 );
 
 export default router;
+export default router

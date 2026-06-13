@@ -87,9 +87,17 @@
         "tags": ["Авторизація"],
         "summary": "Вихід із системи",
         "description": "Анулювання поточної сесії користувача.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "204": {
             "description": "Немає вмісту (Успішний вихід)"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -111,9 +119,17 @@
         "tags": ["Користувачі"],
         "summary": "Отримання поточного користувача",
         "description": "Повертає дані авторизованого користувача.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Успішно"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -151,9 +167,17 @@
         "tags": ["Користувачі"],
         "summary": "Оновлення профілю",
         "description": "Зміна особистих даних користувача.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Успішно"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -186,9 +210,17 @@
         "tags": ["Користувачі"],
         "summary": "Оновлення аватара",
         "description": "Завантаження нового зображення профілю.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Успішно"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -250,9 +282,17 @@
         "tags": ["Рецепти"],
         "summary": "Створення рецепта",
         "description": "Додавання нового рецепта користувачем.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "201": {
             "description": "Створено"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -262,9 +302,17 @@
         "tags": ["Рецепти"],
         "summary": "Улюблені рецепти",
         "description": "Отримання списку рецептів, доданих в улюблені.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Успішно"
+          },
+          "401": {
+            "description": "Не авторизовано"
           },
           "404": {
             "description": "Не знайдено"
@@ -277,9 +325,17 @@
         "tags": ["Рецепти"],
         "summary": "Власні рецепти",
         "description": "Отримання списку рецептів, створених поточним користувачем.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Успішно"
+          },
+          "401": {
+            "description": "Не авторизовано"
           }
         }
       }
@@ -318,6 +374,11 @@
         "tags": ["Рецепти"],
         "summary": "Додати в улюблені",
         "description": "Додавання рецепта до списку улюблених.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "recipeId",
@@ -330,42 +391,37 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Створено"
-          },
-          "400": {
-            "description": "Некоректний запит"
-          },
-          "404": {
-            "description": "Не знайдено"
+          "201": { "description": "Створено" },
+          "400": { "description": "Некоректний запит" },
+          "401": { "description": "Не авторизовано" },
+          "404": { "description": "Не знайдено" }
+        }
+      },
+      "delete": {
+        "tags": ["Рецепти"],
+        "summary": "Видалити з улюблених",
+        "description": "Видалення рецепта зі списку улюблених.",
+        "security": [
+          {
+            "bearerAuth": []
           }
-        },
-        "delete": {
-          "tags": ["Рецепти"],
-          "summary": "Видалити з улюблених",
-          "description": "Видалення рецепта зі списку улюблених.",
-          "parameters": [
-            {
-              "name": "recipeId",
-              "in": "path",
-              "required": true,
-              "description": "Ідентифікатор рецепта",
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Успішно"
-            },
-            "400": {
-              "description": "Некоректний запит"
-            },
-            "404": {
-              "description": "Не знайдено"
+        ],
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "description": "Ідентифікатор рецепта",
+            "schema": {
+              "type": "string"
             }
           }
+        ],
+        "responses": {
+          "200": { "description": "Успішно" },
+          "400": { "description": "Некоректний запит" },
+          "401": { "description": "Не авторизовано" },
+          "404": { "description": "Не знайдено" }
         }
       }
     },
@@ -405,6 +461,14 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Введіть отриманий токен (без слова Bearer)"
+      }
+    },
     "schemas": {
       "RegisterRequest": {
         "type": "object",

@@ -131,6 +131,17 @@
           },
           "401": { "description": "Не авторизовано" }
         }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Видалення облікового запису поточного користувача",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "204": {
+            "description": "Обліковий запис успішно видалено (No Content)"
+          },
+          "401": { "description": "Не авторизовано" }
+        }
       }
     },
     "/api/users": {
@@ -371,6 +382,70 @@
           },
           "400": { "description": "Невірний формат ID" },
           "404": { "description": "Рецепт не знайдено" }
+        }
+      },
+      "delete": {
+        "tags": ["Recipes"],
+        "summary": "Видалення рецепта за ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID рецепта для видалення"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Рецепт успішно видалено" },
+          "401": { "description": "Не авторизовано" },
+          "403": {
+            "description": "Доступ заборонено (ви не є автором цього рецепта)"
+          },
+          "404": { "description": "Рецепт не знайдено" }
+        }
+      }
+    },
+    "/recipes/favorites/{recipeId}": {
+      "post": {
+        "tags": ["Recipes"],
+        "summary": "Додавання рецепта до улюблених",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID рецепта"
+          }
+        ],
+        "responses": {
+          "201": { "description": "Рецепт успішно додано до улюблених" },
+          "400": { "description": "Невірний формат ID або помилка запиту" },
+          "401": { "description": "Не авторизовано" },
+          "404": { "description": "Рецепт не знайдено" }
+        }
+      },
+      "delete": {
+        "tags": ["Recipes"],
+        "summary": "Видалення рецепта з улюблених",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID рецепта"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Рецепт успешно видалено з улюблених" },
+          "400": { "description": "Невірний формат ID або помилка запиту" },
+          "401": { "description": "Не авторизовано" },
+          "404": { "description": "Рецепт не знайдено в улюблених" }
         }
       }
     },

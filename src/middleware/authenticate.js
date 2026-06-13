@@ -1,9 +1,30 @@
-//  из-за пустого файла сервер падает, снизу временная заглушка
+import createHttpError from "http-errors";
+import { Session } from "../models/session.js";
+import { User } from "../models/user.js";
 
 export const authenticate = async (req, res, next) => {
-  // Временная заглушка, чтобы проект запускался.
-  // Имитируем, что пользователь успешно авторизован
-  req.user = { _id: 'mock_user_id_12345' }
+    const { sessionId, accessToken } = req.cookies;
+    if (!sessionId || !accessToken) {
+        throw createHttpError(401, 'Missing access token');
+    }
 
-  next()
-}
+    const session = await Session.findOne({ _id: sessionId, accessToken });
+    if (!session) {
+        throw createHttpError(401, 'Session not found');
+    }
+
+    const isAccessTokenExpired = session.accessTokenValidUntil < Date.now();
+    if (isAccessTokenExpired) {
+        throw createHttpError(401, 'Access token expired');
+    }
+
+    const user = await User.findOne({ _id: session.userId });
+
+    if (!user) {
+        createHttpError(401);
+    }
+
+    req.user = user;
+    
+    next();
+};

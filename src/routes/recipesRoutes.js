@@ -29,6 +29,18 @@ router.post(
   createOwnRecipe,
 )
 
+/**
+ * @swagger
+ * /recipes:
+ *   get:
+ *     summary: Get all recipes
+ *     tags:
+ *       - Recipes
+ *     responses:
+ *       200:
+ *         description: List of recipes
+ */
+
 router.get('/recipes/favorites', authenticate, getFavoriteRecipes)
 
 router.get('/recipes/own', authenticate, getOwnRecipes)

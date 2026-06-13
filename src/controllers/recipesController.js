@@ -1,4 +1,7 @@
 import { Recipe } from '../models/recipe.js'
+import { User } from '../models/user.js'
+import { Ingredient } from '../models/ingredient.js'
+
 
 export const getAllRecipes = async (req, res) => {
   const { category, ingredient, search, page = 1, perPage = 12 } = req.query
@@ -10,12 +13,23 @@ export const getAllRecipes = async (req, res) => {
     filter.category = category
   }
 
-  // if (ingredient) {
-  //   const foundIngredient = await Ingredient.findOne({
-  //     name: { $regex: ingredient, $options: 'i' },
-  //   })
-  //   filter['ingredients.id'] = foundIngredient._id
-  // }
+  if (ingredient) {
+    const foundIngredient = await Ingredient.findOne({
+      name: { $regex: ingredient, $options: 'i' },
+    })
+
+    if (!foundIngredient) {
+      return res.status(200).json({
+        page: Number(page),
+        perPage: Number(perPage),
+        totalRecipes: 0,
+        totalPages: 0,
+        recipes: [],
+      })
+    }
+
+    filter['ingredients.id'] = foundIngredient._id
+  }
 
   if (search) {
     filter.title = { $regex: search, $options: 'i' }
@@ -29,8 +43,8 @@ export const getAllRecipes = async (req, res) => {
   const totalPages = Math.ceil(totalRecipes / perPage)
 
   res.status(200).json({
-    page,
-    perPage,
+    page: Number(page),
+    perPage: Number(perPage),
     totalRecipes,
     totalPages,
     recipes,

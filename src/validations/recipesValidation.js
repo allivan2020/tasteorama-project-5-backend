@@ -9,3 +9,24 @@ export const getAllRecipesSchema = {
     search: Joi.string().allow(''),
   }),
 }
+
+export const createOwnRecipeSchema = {
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().trim().required(),
+    category: Joi.string().trim().required(),
+    area: Joi.string().trim().required(),
+    instructions: Joi.string().trim().required(),
+    description: Joi.string().trim().required(),
+    thumb: Joi.string().trim().required(),
+    time: Joi.string().trim().required(),
+    ingredients: Joi.array()
+      .items(
+        Joi.object({
+          id: Joi.string().hex().length(24).required(),
+          measure: Joi.string().trim().required(),
+        }),
+      )
+      .min(1)
+      .required(),
+  }),
+}

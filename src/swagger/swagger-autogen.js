@@ -7,7 +7,7 @@ const doc = {
   },
   servers: [
     {
-      url: 'https://tasteorama-project-5.onrender.com',
+      url: 'https://tasteorama-project-5-backend.onrender.com',
       description: 'Продакшн сервер (Render)',
     },
     {

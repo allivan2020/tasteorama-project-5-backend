@@ -100,3 +100,63 @@ export const getFavoriteRecipes = async (req, res) => {
     recipes: user.favorites || [],
   })
 }
+export const addFavoriteRecipes = async (req, res) => {
+  const { recipeId } = req.params
+
+  const recipe = await Recipe.findById(recipeId)
+
+  if (!recipe) {
+    return res.status(404).json({
+      message: 'Recipe not found',
+    })
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $addToSet: {
+        favorites: recipeId,
+      },
+    },
+    {
+      returnDocument: 'after',
+    },
+  )
+
+  res.status(201).json({
+    message: 'Recipe added to favorites',
+    favorites: user.favorites,
+  })
+}
+
+export const deleteFavoriteRecipes = async (req, res) => {
+  const { recipeId } = req.params
+
+  const userFavoriteRecipe = await User.findOne({
+    _id: req.user._id,
+    favorites: recipeId,
+  })
+
+  if (!userFavoriteRecipe) {
+    return res.status(404).json({
+      message: 'Recipe not found in favorites',
+    })
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $pull: {
+        favorites: recipeId,
+      },
+    },
+    {
+      new: true,
+    },
+  )
+
+  res.status(200).json({
+    message: 'Recipe removed from favorites',
+    favorites: user.favorites,
+  })
+}

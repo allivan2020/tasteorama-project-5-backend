@@ -7,6 +7,8 @@ import {
   getFavoriteRecipes,
   getRecipeById,
   getOwnRecipes,
+  deleteFavoriteRecipes,
+  addFavoriteRecipes,
 } from '../controllers/recipesController.js'
 
 import {
@@ -32,5 +34,18 @@ router.get('/recipes/favorites', authenticate, getFavoriteRecipes)
 router.get('/recipes/own', authenticate, getOwnRecipes)
 
 router.get('/recipes/:id', isValidId, getRecipeById)
+
+router.post(
+  '/recipes/favorites/:recipeId',
+  authenticate,
+  isValidId,
+  addFavoriteRecipes,
+)
+router.delete(
+  '/recipes/favorites/:recipeId',
+  authenticate,
+  isValidId,
+  deleteFavoriteRecipes,
+)
 
 export default router

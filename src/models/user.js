@@ -21,14 +21,24 @@ const userSchema = new Schema(
       maxlength: 128,
       required: true,
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    favorites: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Recipe',
+      },
+    ],
   },
   { timestamps: true },
 )
 
 userSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  return obj;
-};
+  const obj = this.toObject()
+  delete obj.password
+  return obj
+}
 
 export const User = model('User', userSchema)

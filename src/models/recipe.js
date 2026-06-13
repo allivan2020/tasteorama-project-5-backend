@@ -3,8 +3,7 @@ import { model, Schema } from 'mongoose'
 const recipeIngredientSchema = new Schema(
   {
     id: {
-      type: Schema.Types.ObjectId,
-      ref: 'Ingredient',
+      type: String,
       required: true,
     },
     measure: {

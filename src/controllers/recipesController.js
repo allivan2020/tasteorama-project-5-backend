@@ -1,4 +1,6 @@
 import { Recipe } from '../models/recipe.js'
+import { Ingredient } from '../models/ingredient.js'
+import { User } from '../models/user.js'
 
 export const getAllRecipes = async (req, res) => {
   const { category, ingredient, search, page = 1, perPage = 12 } = req.query
@@ -10,12 +12,15 @@ export const getAllRecipes = async (req, res) => {
     filter.category = category
   }
 
-  // if (ingredient) {
-  //   const foundIngredient = await Ingredient.findOne({
-  //     name: { $regex: ingredient, $options: 'i' },
-  //   })
-  //   filter['ingredients.id'] = foundIngredient._id
-  // }
+  if (ingredient) {
+    const ingredients = await Ingredient.find({
+      name: { $regex: ingredient, $options: 'i' },
+    }).select('_id')
+
+    filter['ingredients.id'] = {
+      $in: ingredients.map((item) => item._id),
+    }
+  }
 
   if (search) {
     filter.title = { $regex: search, $options: 'i' }
@@ -48,18 +53,17 @@ export const getOwnRecipes = async (req, res) => {
 }
 
 export const getFavoriteRecipes = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user._id
 
-  const user = await User.findById(userId)
-    .populate('favorites');
+  const user = await User.findById(userId).populate('favorites')
 
   if (!user) {
     return res.status(404).json({
       message: 'User not found',
-    });
+    })
   }
 
   res.status(200).json({
     recipes: user.favorites || [],
-  });
-};
+  })
+}

@@ -13,23 +13,3 @@ export const getIngredients = async (req, res) => {
   const ingredients = await ingredientsQuery
   res.status(200).json(ingredients)
 }
-
-// export const getIngredients = async (req, res) => {
-//   const { search } = req.query
-
-//   const ingredientsQuery = Ingredient.find({
-//     name: req.name,
-//   })
-
-//   if (search) {
-//     ingredientsQuery.where({
-//       name: { $regex: search, $options: 'i' },
-//     })
-//   }
-
-//   const [ingredients] = await Promise.all([ingredientsQuery.countDocuments()])
-
-//   res.status(200).json({
-//     ingredients,
-//   })
-// }

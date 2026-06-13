@@ -7,12 +7,9 @@ import {
   getOwnRecipes,
 } from '../controllers/recipesController.js';
 
-import { getAllRecipesSchema } from '../validations/recipesValidation.js';
-import { authenticate } from '../middleware/authenticate.js';
-} from '../controllers/recipesController.js'
-
 import { getAllRecipesSchema } from '../validations/recipesValidation.js'
 import { authenticate } from '../middleware/authenticate.js'
+
 
 const router = Router()
 
@@ -27,4 +24,4 @@ router.get(
 );
 
 export default router;
-export default router
+

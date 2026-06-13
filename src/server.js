@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import recipesRoutes from './routes/recipesRoutes.js'
 import ingredientsRoutes from './routes/ingredientsRoutes.js'
+import categoriesRoutes from './routes/categoriesRoutes.js'
 
 dotenv.config()
 
@@ -22,6 +23,7 @@ app.use(cookieParser())
 
 app.use(recipesRoutes)
 app.use(ingredientsRoutes)
+app.use(categoriesRoutes)
 
 app.use(notFoundHandler)
 app.use(errors())

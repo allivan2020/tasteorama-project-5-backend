@@ -5,8 +5,16 @@ const doc = {
     title: 'Tasteorama API',
     description: 'API documentation',
   },
-  host: 'localhost:3000',
-  schemes: ['http'],
+  servers: [
+    {
+      url: 'https://tasteorama-project-5.onrender.com',
+      description: 'Продакшн сервер (Render)',
+    },
+    {
+      url: 'http://localhost:3000',
+      description: 'Локальний сервер',
+    },
+  ],
 }
 
 const outputFile = './src/swagger-output.json'

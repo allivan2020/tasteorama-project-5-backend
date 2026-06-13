@@ -2,31 +2,47 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Tasteorama API",
-    "description": "Повна документація REST API для кулінарного застосунку Tasteorama.",
-    "version": "1.0.0",
-    "contact": {
-      "name": "API Support",
-      "email": "support@tasteorama.com"
-    }
+    "description": "Повна та структурована документація API для кулінарної платформи Tasteorama.",
+    "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "http://localhost:3000/",
-      "description": "Локальний сервер розробки"
+      "url": "https://tasteorama-project-5.onrender.com",
+      "description": "Продакшн сервер (Render)"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Локальний сервер"
     }
   ],
   "tags": [
-    { "name": "Auth", "description": "Аутентифікація та авторизація" },
-    { "name": "Users", "description": "Управління користувачами" },
-    { "name": "Recipes", "description": "Операції з рецептами" },
-    { "name": "Ingredients", "description": "Довідник інгредієнтів" },
-    { "name": "Categories", "description": "Категорії рецептів" }
+    {
+      "name": "Авторизація",
+      "description": "Маршрути для реєстрації, входу, виходу та оновлення токенів"
+    },
+    {
+      "name": "Користувачі",
+      "description": "Керування профілями користувачів"
+    },
+    {
+      "name": "Рецепти",
+      "description": "Пошук, створення та керування рецептами"
+    },
+    {
+      "name": "Інгредієнти",
+      "description": "Отримання та пошук інгредієнтів"
+    },
+    {
+      "name": "Категорії",
+      "description": "Отримання списку категорій"
+    }
   ],
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["Auth"],
-        "summary": "Реєстрація нового користувача",
+        "tags": ["Авторизація"],
+        "summary": "Реєстрація користувача",
+        "description": "Створює новий обліковий запис у системі.",
         "requestBody": {
           "required": true,
           "content": {
@@ -39,29 +55,16 @@
         },
         "responses": {
           "201": {
-            "description": "Користувача успішно створено",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AuthResponse" }
-              }
-            }
-          },
-          "400": {
-            "description": "Помилка валідації даних",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Error" }
-              }
-            }
-          },
-          "409": { "description": "Email вже використовується" }
+            "description": "Створено"
+          }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["Авторизація"],
         "summary": "Авторизація користувача",
+        "description": "Вхід у систему та отримання токенів доступу.",
         "requestBody": {
           "required": true,
           "content": {
@@ -74,516 +77,355 @@
         },
         "responses": {
           "200": {
-            "description": "Успішний вхід",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/AuthResponse" }
-              }
-            }
-          },
-          "401": { "description": "Невірний email або пароль" }
+            "description": "Успішно"
+          }
         }
       }
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": ["Авторизація"],
         "summary": "Вихід із системи",
-        "security": [{ "bearerAuth": [] }],
+        "description": "Анулювання поточної сесії користувача.",
         "responses": {
-          "204": { "description": "Успішний вихід (No Content)" },
-          "401": { "description": "Не авторизовано" }
+          "204": {
+            "description": "Немає вмісту (Успішний вихід)"
+          }
         }
       }
     },
     "/auth/refresh": {
       "post": {
-        "tags": ["Auth"],
-        "summary": "Оновлення токена доступу",
+        "tags": ["Авторизація"],
+        "summary": "Оновлення токена",
+        "description": "Отримання нового access токена за допомогою refresh токена.",
         "responses": {
           "200": {
-            "description": "Новий токен успішно видано",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": { "token": { "type": "string" } }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       }
     },
     "/api/users/current": {
       "get": {
-        "tags": ["Users"],
-        "summary": "Отримання даних поточного користувача",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["Користувачі"],
+        "summary": "Отримання поточного користувача",
+        "description": "Повертає дані авторизованого користувача.",
         "responses": {
           "200": {
-            "description": "Успішно",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
-              }
-            }
-          },
-          "401": { "description": "Не авторизовано" }
-        }
-      },
-      "delete": {
-        "tags": ["Users"],
-        "summary": "Видалення облікового запису поточного користувача",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "204": {
-            "description": "Обліковий запис успішно видалено (No Content)"
-          },
-          "401": { "description": "Не авторизовано" }
+            "description": "Успішно"
+          }
         }
       }
     },
     "/api/users": {
       "get": {
-        "tags": ["Users"],
+        "tags": ["Користувачі"],
         "summary": "Отримання списку користувачів",
-        "security": [{ "bearerAuth": [] }],
+        "description": "Повертає список користувачів з підтримкою пагінації.",
         "parameters": [
           {
             "name": "page",
             "in": "query",
-            "schema": { "type": "integer", "default": 1 }
+            "description": "Номер сторінки",
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "limit",
             "in": "query",
-            "schema": { "type": "integer", "default": 10 }
+            "description": "Кількість елементів на сторінці",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Список користувачів",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/User" }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       },
       "patch": {
-        "tags": ["Users"],
-        "summary": "Оновлення даних поточного користувача",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "username": { "type": "string" },
-                  "bio": { "type": "string" }
-                }
-              }
-            }
-          }
-        },
+        "tags": ["Користувачі"],
+        "summary": "Оновлення профілю",
+        "description": "Зміна особистих даних користувача.",
         "responses": {
           "200": {
-            "description": "Профіль оновлено",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
-              }
-            }
+            "description": "Успішно"
           }
         }
       }
     },
     "/api/users/{id}": {
       "get": {
-        "tags": ["Users"],
+        "tags": ["Користувачі"],
         "summary": "Отримання користувача за ID",
+        "description": "Повертає публічні дані користувача за ідентифікатором.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "description": "Ідентифікатор користувача",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Успішно",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/User" }
-              }
-            }
-          },
-          "404": { "description": "Користувача не знайдено" }
+            "description": "Успішно"
+          }
         }
       }
     },
     "/api/users/avatar": {
       "patch": {
-        "tags": ["Users"],
-        "summary": "Оновлення аватара користувача",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "avatar": {
-                    "type": "string",
-                    "format": "binary",
-                    "description": "Файл зображення"
-                  }
-                }
-              }
-            }
-          }
-        },
+        "tags": ["Користувачі"],
+        "summary": "Оновлення аватара",
+        "description": "Завантаження нового зображення профілю.",
         "responses": {
-          "200": { "description": "Аватар оновлено" }
+          "200": {
+            "description": "Успішно"
+          }
         }
       }
     },
     "/recipes": {
       "get": {
-        "tags": ["Recipes"],
-        "summary": "Отримання списку рецептів з фільтрацією",
+        "tags": ["Рецепти"],
+        "summary": "Отримання рецептів",
+        "description": "Пошук та фільтрація рецептів.",
         "parameters": [
-          { "name": "category", "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Фільтр за категорією",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "ingredient",
             "in": "query",
-            "schema": { "type": "string" }
+            "description": "Фільтр за інгредієнтом",
+            "schema": {
+              "type": "string"
+            }
           },
-          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Пошуковий запит",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
-            "schema": { "type": "integer", "default": 1 }
+            "description": "Номер сторінки",
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "perPage",
             "in": "query",
-            "schema": { "type": "integer", "default": 12 }
+            "description": "Кількість на сторінці",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Список рецептів",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/Recipe" }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       },
       "post": {
-        "tags": ["Recipes"],
-        "summary": "Створення нового рецепта",
-        "security": [{ "bearerAuth": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "$ref": "#/components/schemas/RecipeInput" }
-            }
-          }
-        },
+        "tags": ["Рецепти"],
+        "summary": "Створення рецепта",
+        "description": "Додавання нового рецепта користувачем.",
         "responses": {
           "201": {
-            "description": "Рецепт створено",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Recipe" }
-              }
-            }
-          },
-          "400": { "description": "Помилка валідації" }
+            "description": "Створено"
+          }
         }
       }
     },
     "/recipes/favorites": {
       "get": {
-        "tags": ["Recipes"],
-        "summary": "Отримання улюблених рецептів користувача",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["Рецепти"],
+        "summary": "Улюблені рецепти",
+        "description": "Отримання списку рецептів, доданих в улюблені.",
         "responses": {
           "200": {
-            "description": "Успішно",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/Recipe" }
-                }
-              }
-            }
+            "description": "Успішно"
           },
-          "401": { "description": "Не авторизовано" },
-          "404": { "description": "Список порожній або не знайдено" }
+          "404": {
+            "description": "Не знайдено"
+          }
         }
       }
     },
     "/recipes/own": {
       "get": {
-        "tags": ["Recipes"],
-        "summary": "Отримання рецептів, створених користувачем",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["Рецепти"],
+        "summary": "Власні рецепти",
+        "description": "Отримання списку рецептів, створених поточним користувачем.",
         "responses": {
           "200": {
-            "description": "Успішно",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/Recipe" }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       }
     },
     "/recipes/{id}": {
       "get": {
-        "tags": ["Recipes"],
+        "tags": ["Рецепти"],
         "summary": "Отримання рецепта за ID",
+        "description": "Детальна інформація про рецепт.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "description": "Ідентифікатор рецепта",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Успішно",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/Recipe" }
-              }
-            }
+            "description": "Успішно"
           },
-          "400": { "description": "Невірний формат ID" },
-          "404": { "description": "Рецепт не знайдено" }
-        }
-      },
-      "delete": {
-        "tags": ["Recipes"],
-        "summary": "Видалення рецепта за ID",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "ID рецепта для видалення"
+          "400": {
+            "description": "Некоректний запит"
+          },
+          "404": {
+            "description": "Не знайдено"
           }
-        ],
-        "responses": {
-          "200": { "description": "Рецепт успішно видалено" },
-          "401": { "description": "Не авторизовано" },
-          "403": {
-            "description": "Доступ заборонено (ви не є автором цього рецепта)"
-          },
-          "404": { "description": "Рецепт не знайдено" }
         }
       }
     },
     "/recipes/favorites/{recipeId}": {
       "post": {
-        "tags": ["Recipes"],
-        "summary": "Додавання рецепта до улюблених",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["Рецепти"],
+        "summary": "Додати в улюблені",
+        "description": "Додавання рецепта до списку улюблених.",
         "parameters": [
           {
             "name": "recipeId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
-            "description": "ID рецепта"
+            "description": "Ідентифікатор рецепта",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
-          "201": { "description": "Рецепт успішно додано до улюблених" },
-          "400": { "description": "Невірний формат ID або помилка запиту" },
-          "401": { "description": "Не авторизовано" },
-          "404": { "description": "Рецепт не знайдено" }
-        }
-      },
-      "delete": {
-        "tags": ["Recipes"],
-        "summary": "Видалення рецепта з улюблених",
-        "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "name": "recipeId",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "ID рецепта"
+          "201": {
+            "description": "Створено"
+          },
+          "400": {
+            "description": "Некоректний запит"
+          },
+          "404": {
+            "description": "Не знайдено"
           }
-        ],
-        "responses": {
-          "200": { "description": "Рецепт успешно видалено з улюблених" },
-          "400": { "description": "Невірний формат ID або помилка запиту" },
-          "401": { "description": "Не авторизовано" },
-          "404": { "description": "Рецепт не знайдено в улюблених" }
+        },
+        "delete": {
+          "tags": ["Рецепти"],
+          "summary": "Видалити з улюблених",
+          "description": "Видалення рецепта зі списку улюблених.",
+          "parameters": [
+            {
+              "name": "recipeId",
+              "in": "path",
+              "required": true,
+              "description": "Ідентифікатор рецепта",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Успішно"
+            },
+            "400": {
+              "description": "Некоректний запит"
+            },
+            "404": {
+              "description": "Не знайдено"
+            }
+          }
         }
       }
     },
     "/ingredients": {
       "get": {
-        "tags": ["Ingredients"],
-        "summary": "Пошук інгредієнтів",
+        "tags": ["Інгредієнти"],
+        "summary": "Список інгредієнтів",
+        "description": "Отримання списку або пошук інгредієнтів.",
         "parameters": [
-          { "name": "search", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Пошуковий запит (назва)",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
-            "description": "Список інгредієнтів",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/Ingredient" }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       }
     },
     "/categories": {
       "get": {
-        "tags": ["Categories"],
-        "summary": "Отримання списку всіх категорій",
+        "tags": ["Категорії"],
+        "summary": "Список категорій",
+        "description": "Отримання списку доступних категорій рецептів.",
         "responses": {
           "200": {
-            "description": "Список категорій",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { "type": "string", "example": "Dessert" }
-                }
-              }
-            }
+            "description": "Успішно"
           }
         }
       }
     }
   },
   "components": {
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
-    },
     "schemas": {
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string", "example": "60d0fe4f5311236168a109ca" },
-          "username": { "type": "string", "example": "chef_mario" },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "mario@example.com"
-          },
-          "avatarUrl": {
-            "type": "string",
-            "example": "https://example.com/avatar.jpg"
-          }
-        }
-      },
-      "Recipe": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "title": { "type": "string", "example": "Classic Lasagna" },
-          "category": { "type": "string", "example": "Pasta" },
-          "instructions": { "type": "string" },
-          "ingredients": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/IngredientRef" }
-          },
-          "time": {
-            "type": "integer",
-            "description": "Час приготування у хвилинах",
-            "example": 45
-          },
-          "authorId": { "type": "string" }
-        }
-      },
-      "RecipeInput": {
-        "type": "object",
-        "required": [
-          "title",
-          "category",
-          "instructions",
-          "ingredients",
-          "time"
-        ],
-        "properties": {
-          "title": { "type": "string", "example": "Classic Lasagna" },
-          "category": { "type": "string", "example": "Pasta" },
-          "instructions": { "type": "string" },
-          "ingredients": {
-            "type": "array",
-            "items": { "$ref": "#/components/schemas/IngredientRef" }
-          },
-          "time": { "type": "integer", "example": 45 }
-        }
-      },
-      "Ingredient": {
-        "type": "object",
-        "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string", "example": "Tomato" },
-          "description": { "type": "string" }
-        }
-      },
-      "IngredientRef": {
-        "type": "object",
-        "properties": {
-          "ingredientId": { "type": "string" },
-          "measure": { "type": "string", "example": "200g" }
-        }
-      },
       "RegisterRequest": {
         "type": "object",
         "required": ["username", "email", "password"],
         "properties": {
-          "username": { "type": "string", "example": "chef_mario" },
+          "username": {
+            "type": "string",
+            "example": "Ivan_Chef",
+            "description": "Ім'я користувача"
+          },
           "email": {
             "type": "string",
             "format": "email",
-            "example": "mario@example.com"
+            "example": "user@example.com",
+            "description": "Електронна пошта"
           },
           "password": {
             "type": "string",
             "format": "password",
-            "example": "SecurePass123!"
+            "example": "StrongPass123!",
+            "description": "Пароль"
           }
         }
       },
@@ -594,29 +436,15 @@
           "email": {
             "type": "string",
             "format": "email",
-            "example": "mario@example.com"
+            "example": "user@example.com",
+            "description": "Електронна пошта"
           },
           "password": {
             "type": "string",
             "format": "password",
-            "example": "SecurePass123!"
+            "example": "StrongPass123!",
+            "description": "Пароль"
           }
-        }
-      },
-      "AuthResponse": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI..."
-          },
-          "user": { "$ref": "#/components/schemas/User" }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "message": { "type": "string", "example": "Internal Server Error" }
         }
       }
     }

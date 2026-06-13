@@ -11,6 +11,10 @@ import { errorHandler } from './middleware/errorHandler.js'
 import { notFoundHandler } from './middleware/notFoundHandler.js'
 import { swaggerSpec } from './swagger/swagger.js'
 
+<<<<<<< HEAD
+import usersRoutes from './routes/usersRoutes.js'
+=======
+>>>>>>> 8297d87632b760b9275ab0d69ac3b5e4df70244b
 import recipesRoutes from './routes/recipesRoutes.js'
 import ingredientsRoutes from './routes/ingredientsRoutes.js'
 import categoriesRoutes from './routes/categoriesRoutes.js'
@@ -33,7 +37,11 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec),
 )
+<<<<<<< HEAD
+app.use(usersRoutes)
+=======
 
+>>>>>>> 8297d87632b760b9275ab0d69ac3b5e4df70244b
 app.use(recipesRoutes)
 app.use(ingredientsRoutes)
 app.use(categoriesRoutes)

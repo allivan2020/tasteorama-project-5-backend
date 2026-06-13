@@ -29,7 +29,18 @@ app.use(cors())
 app.use(cookieParser())
 
 // Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+const swaggerOptions = {
+  swaggerOptions: {
+    servers: [
+      {
+        url: process.env.BASE_URL || `http://localhost:${PORT}`,
+        description: 'Current environment server',
+      },
+    ],
+  },
+};
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
 // Routes
 app.use(usersRoutes)

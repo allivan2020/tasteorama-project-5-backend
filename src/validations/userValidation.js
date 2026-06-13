@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import { Joi } from 'celebrate'
 import { Segments } from 'celebrate'
 
 export const updateUserSchema = {

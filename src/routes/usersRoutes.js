@@ -9,11 +9,11 @@ import {
   getCurrent,
   patchAvatar,
   patchUser,
-} from '../controllers/usersController.js'
+} from '../controllers/usersControllers.js'
 import {
   updateUserSchema,
   paginationSchema,
-} from '../validations/usersValidation.js'
+} from '../validations/userValidation.js'
 
 const router = Router()
 const upload = multer({ dest: 'temp/' }) 

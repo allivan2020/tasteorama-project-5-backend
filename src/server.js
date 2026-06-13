@@ -13,8 +13,10 @@ import { swaggerSpec } from './swagger/swagger.js'
 
 import recipesRoutes from './routes/recipesRoutes.js'
 import ingredientsRoutes from './routes/ingredientsRoutes.js'
+import categoriesRoutes from './routes/categoriesRoutes.js'
+
 import authRoutes from './routes/auth.js'
-import cookieParser from 'cookie-parser'
+
 dotenv.config()
 
 const PORT = process.env.PORT || 3000
@@ -34,6 +36,7 @@ app.use(
 
 app.use(recipesRoutes)
 app.use(ingredientsRoutes)
+app.use(categoriesRoutes)
 app.use(authRoutes)
 
 app.use(notFoundHandler)

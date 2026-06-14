@@ -10,6 +10,7 @@ import swaggerDocument from './swagger-output.json' with { type: 'json' }
 import { connectDB } from './db/initMongoDB.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import { notFoundHandler } from './middleware/notFoundHandler.js'
+import { helmetConfig } from './middleware/helmetConfig.js'
 
 import usersRoutes from './routes/usersRoutes.js'
 import recipesRoutes from './routes/recipesRoutes.js'
@@ -23,7 +24,7 @@ const PORT = process.env.PORT || 3000
 
 const app = express() // 👈 ВАЖНО: СНАЧАЛА app
 
-app.use(helmet())
+app.use(helmetConfig)
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())

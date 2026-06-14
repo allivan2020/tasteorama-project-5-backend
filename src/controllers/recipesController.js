@@ -13,21 +13,13 @@ export const getAllRecipes = async (req, res) => {
   }
 
   if (ingredient) {
-    const foundIngredient = await Ingredient.findOne({
+    const foundIngredient = await Ingredient.find({
       name: { $regex: ingredient, $options: 'i' },
-    })
+    }).select('_id')
 
-    if (!foundIngredient) {
-      return res.status(200).json({
-        page: Number(page),
-        perPage: Number(perPage),
-        totalRecipes: 0,
-        totalPages: 0,
-        recipes: [],
-      })
+    filter['ingredients.id'] = {
+      $in: foundIngredient.map((item) => item._id),
     }
-
-    filter['ingredients.id'] = foundIngredient._id
   }
 
   if (search) {
@@ -42,8 +34,8 @@ export const getAllRecipes = async (req, res) => {
   const totalPages = Math.ceil(totalRecipes / perPage)
 
   res.status(200).json({
-    page: Number(page),
-    perPage: Number(perPage),
+    page,
+    perPage,
     totalRecipes,
     totalPages,
     recipes,

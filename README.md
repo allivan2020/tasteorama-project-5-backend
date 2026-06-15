@@ -104,6 +104,12 @@ SMTP_PASSWORD=your_smtp_password
 APP_DOMAIN=http://localhost:3000
 ```
 
+Скопируйте .env.example в .env
+Заполните переменные актуальными значениями
+Для локальной разработки:
+Backend: http://localhost:3000
+Frontend: http://localhost:3001
+
 ---
 
 ## Running the Project

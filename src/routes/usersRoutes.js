@@ -13,7 +13,7 @@ import {
 import {
   updateUserSchema,
   paginationSchema,
-} from '../validations/usersValidation.js'
+} from '../validations/userValidation.js'
 import { Segments } from 'celebrate'
 
 const router = Router()

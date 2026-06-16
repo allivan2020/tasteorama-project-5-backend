@@ -6,6 +6,7 @@ import {
   updateUserAvatar,
   updateUserData,
 } from '../services/usersService.js'
+import { uploadToCloudinary } from '../utils/cloudinary.js'
 
 // GET /api/users
 export const getUsers = async (req, res, next) => {
@@ -44,20 +45,23 @@ export const getCurrent = async (req, res, next) => {
 export const patchAvatar = async (req, res, next) => {
   try {
     if (!req.file) throw createError(400, 'Avatar file is required')
-    const avatarUrl = req.file.path 
+
+    const result = await uploadToCloudinary(req.file.buffer)
+    const avatarUrl = result.secure_url
+
     const user = await updateUserAvatar(req.user._id, avatarUrl)
-    res.json({ avatar: user.avatar })
+    res.status(201).json({ avatar: user.avatar })
   } catch (err) {
     next(err)
   }
 }
 
-
+// PATCH /api/users
 export const patchUser = async (req, res, next) => {
   try {
     const user = await updateUserData(req.user._id, req.body)
     if (!user) throw createError(404, 'User not found')
-    res.json(user)
+    res.status(201).json(user)
   } catch (err) {
     next(err)
   }

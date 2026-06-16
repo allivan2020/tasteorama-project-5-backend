@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { celebrate, Segments } from 'celebrate'
-import multer from 'multer'
+import { celebrate } from 'celebrate'
 
 import { authenticate } from '../middleware/authenticate.js'
+import { uploadAvatar } from '../config/cloudinary.js'
 import {
   getUsers,
   getUserWithRecipes,
@@ -14,31 +14,37 @@ import {
   updateUserSchema,
   paginationSchema,
 } from '../validations/usersValidation.js'
+import { Segments } from 'celebrate'
 
 const router = Router()
-const upload = multer({ dest: 'temp/' }) 
 
+// Public: get current authenticated user
 router.get('/api/users/current', authenticate, getCurrent)
 
+// Public: get paginated list of users
 router.get(
   '/api/users',
   celebrate({ [Segments.QUERY]: paginationSchema }),
   getUsers
 )
 
-router.get('/api/users/:id', getUserWithRecipes)
+// Bug #1 fix: added `authenticate` — endpoint must require authorization
+router.get('/api/users/:id', authenticate, getUserWithRecipes)
 
+// Bug #3 fix: use `uploadAvatar` from cloudinary config instead of local multer
 router.patch(
   '/api/users/avatar',
   authenticate,
-  upload.single('avatar'),
+  uploadAvatar.single('avatar'),
   patchAvatar
 )
 
+// Bug #2 fix: updateUserSchema already contains [Segments.BODY] wrapper,
+// so pass it directly to celebrate() without double-wrapping
 router.patch(
   '/api/users',
   authenticate,
-  celebrate({ [Segments.BODY]: updateUserSchema }),
+  celebrate(updateUserSchema),
   patchUser
 )
 

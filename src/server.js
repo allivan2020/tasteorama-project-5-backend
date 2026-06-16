@@ -26,13 +26,16 @@ const app = express()
 
 app.use(helmetConfig)
 app.use(express.json())
-app.use(cors())
-// app.use(
-//   cors({
-//     origin: ['http://localhost:5173', 'https://tasteorama.vercel.app'],
-//     credentials: true,
-//   }),
-// )
+// app.use(cors())
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3001',
+      'https://tasteorama-project-5-frontend.vercel.app/',
+    ],
+    credentials: true,
+  }),
+)
 app.use(cookieParser())
 
 // Swagger

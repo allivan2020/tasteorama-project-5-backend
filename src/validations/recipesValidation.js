@@ -28,5 +28,5 @@ export const createOwnRecipeSchema = {
       )
       .min(1)
       .required(),
-  }),
+  }).required(),
 }

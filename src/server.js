@@ -5,20 +5,17 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swagger-output.json' with { type: 'json' }
 
 import { connectDB } from './db/initMongoDB.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import { notFoundHandler } from './middleware/notFoundHandler.js'
-import { swaggerSpec } from './swagger/swagger.js'
+import { helmetConfig } from './middleware/helmetConfig.js'
 
-<<<<<<< HEAD
 import usersRoutes from './routes/usersRoutes.js'
-=======
->>>>>>> 8297d87632b760b9275ab0d69ac3b5e4df70244b
 import recipesRoutes from './routes/recipesRoutes.js'
 import ingredientsRoutes from './routes/ingredientsRoutes.js'
 import categoriesRoutes from './routes/categoriesRoutes.js'
-
 import authRoutes from './routes/auth.js'
 
 dotenv.config()
@@ -27,26 +24,39 @@ const PORT = process.env.PORT || 3000
 
 const app = express()
 
-app.use(helmet())
+app.use(helmetConfig)
 app.use(express.json())
 app.use(cors())
+// app.use(
+//   cors({
+//     origin: ['http://localhost:5173', 'https://tasteorama.vercel.app'],
+//     credentials: true,
+//   }),
+// )
 app.use(cookieParser())
 
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec),
-)
-<<<<<<< HEAD
-app.use(usersRoutes)
-=======
+// Swagger
+const swaggerOptions = {
+  swaggerOptions: {
+    servers: [
+      {
+        url: process.env.BASE_URL || `http://localhost:${PORT}`,
+        description: 'Current environment server',
+      },
+    ],
+  },
+};
 
->>>>>>> 8297d87632b760b9275ab0d69ac3b5e4df70244b
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
+
+// Routes
+app.use(usersRoutes)
 app.use(recipesRoutes)
 app.use(ingredientsRoutes)
 app.use(categoriesRoutes)
 app.use(authRoutes)
 
+// Errors
 app.use(notFoundHandler)
 app.use(errors())
 app.use(errorHandler)

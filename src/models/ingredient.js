@@ -2,6 +2,10 @@ import { model, Schema } from 'mongoose'
 
 const ingredientSchema = new Schema(
   {
+    _id: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       trim: true,

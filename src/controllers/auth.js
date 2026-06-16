@@ -9,7 +9,7 @@ export const registerUser = async (req, res) => {
 
   const existingUser = await User.findOne({ email })
   if (existingUser) {
-    throw createHttpError(400, 'Email in use')
+    throw createHttpError(409, 'Email already in use')
   }
 
   const hashedPassword = await bcrypt.hash(password, 10)
@@ -39,11 +39,15 @@ export const loginUser = async (req, res) => {
     throw createHttpError(401, 'Invalid credentials')
   }
   
-  await Session.deleteOne({ userId: user._id });
+  await Session.deleteMany({ userId: user._id });
   const newSession = await createSession(user._id);
   setSessionCookies(res, newSession);
 
-  res.status(200).json({ user })
+  res.status(200).json({ user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    } })
 }
 
 export const logoutUser = async (req, res) => {

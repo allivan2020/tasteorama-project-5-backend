@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { celebrate } from 'celebrate'
 
 import { authenticate } from '../middleware/authenticate.js'
-import { uploadAvatar } from '../config/cloudinary.js'
+import { uploadAvatar } from '../utils/cloudinary.js'
 import {
   getUsers,
   getUserWithRecipes,

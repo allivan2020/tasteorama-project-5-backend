@@ -41,28 +41,23 @@ export const getCurrent = async (req, res, next) => {
 }
 
 // PATCH /api/users/avatar
-// Bug #3 fix: cloudinary storage puts the public URL in req.file.path
-// (multer-storage-cloudinary sets it there), so we read it correctly
 export const patchAvatar = async (req, res, next) => {
   try {
     if (!req.file) throw createError(400, 'Avatar file is required')
-
-    // multer-storage-cloudinary stores the secure URL in req.file.path
-    const avatarUrl = req.file.path
-
+    const avatarUrl = req.file.path 
     const user = await updateUserAvatar(req.user._id, avatarUrl)
-    res.status(201).json({ avatar: user.avatar })
+    res.json({ avatar: user.avatar })
   } catch (err) {
     next(err)
   }
 }
 
-// PATCH /api/users
+
 export const patchUser = async (req, res, next) => {
   try {
     const user = await updateUserData(req.user._id, req.body)
     if (!user) throw createError(404, 'User not found')
-    res.status(201).json(user)
+    res.json(user)
   } catch (err) {
     next(err)
   }

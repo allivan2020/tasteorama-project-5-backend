@@ -31,7 +31,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3001',
-      'https://tasteorama-project-5-frontend.vercel.app/',
+      'https://tasteorama-project-5-frontend.vercel.app',
     ],
     credentials: true,
   }),

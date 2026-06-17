@@ -25,6 +25,15 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    favorites: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Recipe',
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 )

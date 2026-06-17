@@ -6,7 +6,7 @@ export const registerUserSchema = {
       .trim()
       .min(2)
       .max(16)
-      .pattern(new RegExp('^[a-zA-Zа-яА-ЯіІїЇєЄґҐ][a-zA-Z0-9а-яА-ЯіІїЇєЄґҐ_.-]*$'))
+      .pattern(new RegExp('^[a-zA-Zа-яА-ЯіІїЇєЄґҐ][a-zA-Z0-9а-яА-ЯіІїЇєЄґҐ_. -]*$'))
       .required()
       .empty(false)
       .messages({

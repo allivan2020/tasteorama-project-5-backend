@@ -40,7 +40,9 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["Авторизація"],
+        "tags": [
+          "Авторизація"
+        ],
         "summary": "Реєстрація користувача",
         "description": "Створює новий обліковий запис у системі.",
         "requestBody": {
@@ -62,7 +64,9 @@
     },
     "/auth/login": {
       "post": {
-        "tags": ["Авторизація"],
+        "tags": [
+          "Авторизація"
+        ],
         "summary": "Авторизація користувача",
         "description": "Вхід у систему та отримання токенів доступу.",
         "requestBody": {
@@ -84,7 +88,9 @@
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Авторизація"],
+        "tags": [
+          "Авторизація"
+        ],
         "summary": "Вихід із системи",
         "description": "Анулювання поточної сесії користувача.",
         "security": [
@@ -104,7 +110,9 @@
     },
     "/auth/refresh": {
       "post": {
-        "tags": ["Авторизація"],
+        "tags": [
+          "Авторизація"
+        ],
         "summary": "Оновлення токена",
         "description": "Отримання нового access токена за допомогою refresh токена.",
         "responses": {
@@ -116,7 +124,9 @@
     },
     "/api/users/current": {
       "get": {
-        "tags": ["Користувачі"],
+        "tags": [
+          "Користувачі"
+        ],
         "summary": "Отримання поточного користувача",
         "description": "Повертає дані авторизованого користувача.",
         "security": [
@@ -136,7 +146,9 @@
     },
     "/api/users": {
       "get": {
-        "tags": ["Користувачі"],
+        "tags": [
+          "Користувачі"
+        ],
         "summary": "Отримання списку користувачів",
         "description": "Повертає список користувачів з підтримкою пагінації.",
         "parameters": [
@@ -164,7 +176,9 @@
         }
       },
       "patch": {
-        "tags": ["Користувачі"],
+        "tags": [
+          "Користувачі"
+        ],
         "summary": "Оновлення профілю",
         "description": "Зміна особистих даних користувача.",
         "security": [
@@ -173,18 +187,44 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Успішно"
+          "201": {
+            "description": "Профіль оновлено"
+          },
+          "400": {
+            "description": "Помилка валідації"
           },
           "401": {
             "description": "Не авторизовано"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 16,
+                    "example": "JohnDoe"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/users/{id}": {
       "get": {
-        "tags": ["Користувачі"],
+        "tags": [
+          "Користувачі"
+        ],
         "summary": "Отримання користувача за ID",
         "description": "Повертає публічні дані користувача за ідентифікатором.",
         "parameters": [
@@ -207,7 +247,9 @@
     },
     "/api/users/avatar": {
       "patch": {
-        "tags": ["Користувачі"],
+        "tags": [
+          "Користувачі"
+        ],
         "summary": "Оновлення аватара",
         "description": "Завантаження нового зображення профілю.",
         "security": [
@@ -216,18 +258,43 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Успішно"
+          "201": {
+            "description": "Аватар оновлено"
+          },
+          "400": {
+            "description": "Файл не завантажено"
           },
           "401": {
             "description": "Не авторизовано"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "avatar"
+                ],
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Файл зображення (jpg, jpeg, png, webp)"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/recipes": {
       "get": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Отримання рецептів",
         "description": "Пошук та фільтрація рецептів.",
         "parameters": [
@@ -279,7 +346,9 @@
         }
       },
       "post": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Створення рецепта",
         "description": "Додавання нового рецепта користувачем.",
         "security": [
@@ -299,7 +368,9 @@
     },
     "/recipes/favorites": {
       "get": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Улюблені рецепти",
         "description": "Отримання списку рецептів, доданих в улюблені.",
         "security": [
@@ -322,7 +393,9 @@
     },
     "/recipes/own": {
       "get": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Власні рецепти",
         "description": "Отримання списку рецептів, створених поточним користувачем.",
         "security": [
@@ -342,7 +415,9 @@
     },
     "/recipes/{id}": {
       "get": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Отримання рецепта за ID",
         "description": "Детальна інформація про рецепт.",
         "parameters": [
@@ -371,7 +446,9 @@
     },
     "/recipes/favorites/{recipeId}": {
       "post": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Додати в улюблені",
         "description": "Додавання рецепта до списку улюблених.",
         "security": [
@@ -391,14 +468,24 @@
           }
         ],
         "responses": {
-          "201": { "description": "Створено" },
-          "400": { "description": "Некоректний запит" },
-          "401": { "description": "Не авторизовано" },
-          "404": { "description": "Не знайдено" }
+          "201": {
+            "description": "Створено"
+          },
+          "400": {
+            "description": "Некоректний запит"
+          },
+          "401": {
+            "description": "Не авторизовано"
+          },
+          "404": {
+            "description": "Не знайдено"
+          }
         }
       },
       "delete": {
-        "tags": ["Рецепти"],
+        "tags": [
+          "Рецепти"
+        ],
         "summary": "Видалити з улюблених",
         "description": "Видалення рецепта зі списку улюблених.",
         "security": [
@@ -418,16 +505,26 @@
           }
         ],
         "responses": {
-          "200": { "description": "Успішно" },
-          "400": { "description": "Некоректний запит" },
-          "401": { "description": "Не авторизовано" },
-          "404": { "description": "Не знайдено" }
+          "200": {
+            "description": "Успішно"
+          },
+          "400": {
+            "description": "Некоректний запит"
+          },
+          "401": {
+            "description": "Не авторизовано"
+          },
+          "404": {
+            "description": "Не знайдено"
+          }
         }
       }
     },
     "/ingredients": {
       "get": {
-        "tags": ["Інгредієнти"],
+        "tags": [
+          "Інгредієнти"
+        ],
         "summary": "Список інгредієнтів",
         "description": "Отримання списку або пошук інгредієнтів.",
         "parameters": [
@@ -449,7 +546,9 @@
     },
     "/categories": {
       "get": {
-        "tags": ["Категорії"],
+        "tags": [
+          "Категорії"
+        ],
         "summary": "Список категорій",
         "description": "Отримання списку доступних категорій рецептів.",
         "responses": {
@@ -472,7 +571,11 @@
     "schemas": {
       "RegisterRequest": {
         "type": "object",
-        "required": ["username", "email", "password"],
+        "required": [
+          "username",
+          "email",
+          "password"
+        ],
         "properties": {
           "username": {
             "type": "string",
@@ -495,7 +598,10 @@
       },
       "LoginRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "properties": {
           "email": {
             "type": "string",

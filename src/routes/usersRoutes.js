@@ -18,34 +18,65 @@ import { Segments } from 'celebrate'
 
 const router = Router()
 
-// Public: get current authenticated user
 router.get('/api/users/current', authenticate, getCurrent)
 
-// Public: get paginated list of users
 router.get(
   '/api/users',
   celebrate({ [Segments.QUERY]: paginationSchema }),
   getUsers
 )
 
-// Bug #1 fix: added `authenticate` — endpoint must require authorization
 router.get('/api/users/:id', authenticate, getUserWithRecipes)
 
-// Bug #3 fix: use `uploadAvatar` from cloudinary config instead of local multer
 router.patch(
   '/api/users/avatar',
   authenticate,
   uploadAvatar.single('avatar'),
   patchAvatar
+  /*
+    #swagger.summary = 'Оновлення аватара'
+    #swagger.description = 'Завантаження нового зображення профілю.'
+    #swagger.consumes = ['multipart/form-data']
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'multipart/form-data': {
+          schema: {
+            type: 'object',
+            required: ['avatar'],
+            properties: {
+              avatar: { type: 'string', format: 'binary' }
+            }
+          }
+        }
+      }
+    }
+  */
 )
 
-// Bug #2 fix: updateUserSchema already contains [Segments.BODY] wrapper,
-// so pass it directly to celebrate() without double-wrapping
 router.patch(
   '/api/users',
   authenticate,
   celebrate(updateUserSchema),
   patchUser
+  /*
+    #swagger.summary = 'Оновлення профілю'
+    #swagger.description = 'Зміна особистих даних користувача.'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            type: 'object',
+            required: ['username'],
+            properties: {
+              username: { type: 'string', example: 'JohnDoe' }
+            }
+          }
+        }
+      }
+    }
+  */
 )
 
 export default router

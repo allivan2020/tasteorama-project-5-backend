@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import 'dotenv/config'
 import express from 'express'
 import { errors } from 'celebrate'
 import helmet from 'helmet'
@@ -18,7 +18,7 @@ import ingredientsRoutes from './routes/ingredientsRoutes.js'
 import categoriesRoutes from './routes/categoriesRoutes.js'
 import authRoutes from './routes/auth.js'
 
-dotenv.config()
+
 
 const PORT = process.env.PORT || 3000
 
@@ -59,9 +59,9 @@ app.use(ingredientsRoutes)
 app.use(categoriesRoutes)
 app.use(authRoutes)
 
-// Errors
-app.use(notFoundHandler)
+// Errors — celebrate errors first, then 404, then generic
 app.use(errors())
+app.use(notFoundHandler)
 app.use(errorHandler)
 
 const startServer = async () => {

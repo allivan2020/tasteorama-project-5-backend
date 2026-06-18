@@ -69,28 +69,12 @@ export const getRecipeById = async (req, res) => {
 export const createOwnRecipe = async (req, res) => {
   const owner = req.user._id
 
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).json({
-      message: 'Recipe data is required',
-    })
-  }
+  const recipe = await Recipe.create({
+    ...req.body,
+    owner,
+  })
 
-  try {
-    const recipe = await Recipe.create({
-      ...req.body,
-      owner,
-    })
-
-    res.status(201).json(recipe)
-  } catch (error) {
-    if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        message: error.message,
-      })
-    }
-
-    throw error
-  }
+  res.status(201).json(recipe)
 }
 
 export const getFavoriteRecipes = async (req, res) => {

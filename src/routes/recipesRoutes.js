@@ -15,49 +15,40 @@ import {
   createOwnRecipeSchema,
   getAllRecipesSchema,
 } from '../validations/recipesValidation.js'
+
 import { authenticate } from '../middleware/authenticate.js'
 import { isValidId } from '../middleware/isValidId.js'
+import { ctrlWrapper } from '../utils/ctrlWrapper.js'
 
 const router = Router()
 
-router.get('/recipes', celebrate(getAllRecipesSchema), getAllRecipes)
+
+router.get('/', celebrate(getAllRecipesSchema), ctrlWrapper(getAllRecipes))
+
+
+router.get('/own', authenticate, ctrlWrapper(getOwnRecipes))
+router.get('/favorites', authenticate, ctrlWrapper(getFavoriteRecipes))
+
+
+router.get('/:id', isValidId, ctrlWrapper(getRecipeById))
 
 router.post(
-  '/recipes',
+  '/',
   authenticate,
   celebrate(createOwnRecipeSchema),
-  createOwnRecipe,
+  ctrlWrapper(createOwnRecipe),
 )
-
-/**
- * @swagger
- * /recipes:
- *   get:
- *     summary: Get all recipes
- *     tags:
- *       - Recipes
- *     responses:
- *       200:
- *         description: List of recipes
- */
-
-router.get('/recipes/favorites', authenticate, getFavoriteRecipes)
-
-router.get('/recipes/own', authenticate, getOwnRecipes)
-
-router.get('/recipes/:id', isValidId, getRecipeById)
-
 router.post(
-  '/recipes/favorites/:recipeId',
+  '/favorites/:recipeId',
   authenticate,
   isValidId,
-  addFavoriteRecipes,
+  ctrlWrapper(addFavoriteRecipes),
 )
 router.delete(
-  '/recipes/favorites/:recipeId',
+  '/favorites/:recipeId',
   authenticate,
   isValidId,
-  deleteFavoriteRecipes,
+  ctrlWrapper(deleteFavoriteRecipes),
 )
 
 export default router

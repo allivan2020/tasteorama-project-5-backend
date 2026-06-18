@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { Ingredient } from '../models/ingredient.js'
 import { getIngredients } from '../controllers/ingredientsController.js'
+import { ctrlWrapper } from '../utils/ctrlWrapper.js'
 
 const router = Router()
 
-router.get('/ingredients', getIngredients)
+router.get('/', ctrlWrapper(getIngredients))
 
 export default router

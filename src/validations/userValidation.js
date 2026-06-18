@@ -1,6 +1,5 @@
 import { Segments } from 'celebrate'
 
-// Стало:
 import { Joi} from 'celebrate'
 
 export const updateUserSchema = {

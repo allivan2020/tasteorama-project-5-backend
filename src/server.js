@@ -26,7 +26,6 @@ const app = express()
 
 app.use(helmetConfig)
 app.use(express.json())
-// app.use(cors())
 app.use(
   cors({
     origin: [
@@ -53,11 +52,11 @@ const swaggerOptions = {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
 
 // Routes
-app.use(usersRoutes)
-app.use(recipesRoutes)
-app.use(ingredientsRoutes)
-app.use(categoriesRoutes)
-app.use(authRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/users', usersRoutes)
+app.use('/api/recipes', recipesRoutes)
+app.use('/api/ingredients', ingredientsRoutes)
+app.use('/api/categories', categoriesRoutes)
 
 // Errors — celebrate errors first, then 404, then generic
 app.use(errors())

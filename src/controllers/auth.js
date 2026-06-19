@@ -23,11 +23,7 @@ export const registerUser = async (req, res) => {
 
   const newSession = await createSession(newUser._id)
 
-  console.log('SESSION CREATED:', newSession)
-
   setSessionCookies(res, newSession)
-
-  console.log('COOKIES SET')
 
   res.status(201).json({ newUser })
 }

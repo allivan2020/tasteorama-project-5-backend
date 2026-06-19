@@ -19,6 +19,8 @@ import {
 import { authenticate } from '../middleware/authenticate.js'
 import { isValidId } from '../middleware/isValidId.js'
 import { ctrlWrapper } from '../utils/ctrlWrapper.js'
+import { uploadRecipeImage } from '../utils/cloudinary.js'
+import { parseRecipeFormData } from '../middleware/parseRecipeFormData.js'
 
 const router = Router()
 
@@ -35,6 +37,8 @@ router.get('/:id', isValidId, ctrlWrapper(getRecipeById))
 router.post(
   '/',
   authenticate,
+  uploadRecipeImage.single('thumb'),
+  parseRecipeFormData,
   celebrate(createOwnRecipeSchema),
   ctrlWrapper(createOwnRecipe),
 )

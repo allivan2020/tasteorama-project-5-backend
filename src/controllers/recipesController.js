@@ -1,6 +1,7 @@
 import { Recipe } from '../models/recipe.js'
 import { User } from '../models/user.js'
 import { Ingredient } from '../models/ingredient.js'
+import { uploadRecipeToCloudinary } from '../utils/cloudinary.js'
 
 export const getAllRecipes = async (req, res) => {
   const { category, ingredient, search, page = 1, perPage = 12 } = req.query
@@ -69,12 +70,35 @@ export const getRecipeById = async (req, res) => {
 export const createOwnRecipe = async (req, res) => {
   const owner = req.user._id
 
-  const recipe = await Recipe.create({
-    ...req.body,
-    owner,
-  })
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res.status(400).json({
+      message: 'Recipe data is required',
+    })
+  }
 
-  res.status(201).json(recipe)
+  try {
+    const recipeData = {
+      ...req.body,
+      owner,
+    }
+
+    if (req.file) {
+      const result = await uploadRecipeToCloudinary(req.file.buffer)
+      recipeData.thumb = result.secure_url
+    }
+
+    const recipe = await Recipe.create(recipeData)
+
+    res.status(201).json(recipe)
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({
+        message: error.message,
+      })
+    }
+
+    throw error
+  }
 }
 
 export const getFavoriteRecipes = async (req, res) => {

@@ -14,6 +14,7 @@ import {
 import {
   createOwnRecipeSchema,
   getAllRecipesSchema,
+  getOwnRecipesSchema,
 } from '../validations/recipesValidation.js'
 
 import { authenticate } from '../middleware/authenticate.js'
@@ -28,7 +29,12 @@ const router = Router()
 router.get('/', celebrate(getAllRecipesSchema), ctrlWrapper(getAllRecipes))
 
 
-router.get('/own', authenticate, ctrlWrapper(getOwnRecipes))
+router.get(
+  '/own',
+  authenticate,
+  celebrate(getOwnRecipesSchema),
+  ctrlWrapper(getOwnRecipes),
+)
 router.get('/favorites', authenticate, ctrlWrapper(getFavoriteRecipes))
 
 

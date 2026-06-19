@@ -34,11 +34,6 @@ const recipeSchema = new Schema(
       required: true,
       ref: 'User',
     },
-    area: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     instructions: {
       type: String,
       required: true,
@@ -57,6 +52,11 @@ const recipeSchema = new Schema(
     time: {
       type: String,
       required: true,
+      trim: true,
+    },
+    cals: {
+      type: String,
+      required: false,
       trim: true,
     },
     ingredients: {

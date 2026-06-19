@@ -87,8 +87,6 @@ export const createOwnRecipe = async (req, res) => {
     if (req.file) {
       const result = await uploadRecipeToCloudinary(req.file.buffer);
       recipeData.thumb = result.secure_url;
-    } else {
-      return res.status(400).json({ message: "Image is required" });
     }
 
     const recipe = await Recipe.create(recipeData);

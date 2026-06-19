@@ -242,6 +242,101 @@
         "responses": {
           "200": { "description": "Список рецептів" }
         }
+      },
+      "post": {
+        "tags": ["Recipes"],
+        "summary": "Створити власний рецепт",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "category",
+                  "area",
+                  "instructions",
+                  "description",
+                  "thumb",
+                  "time",
+                  "ingredients"
+                ],
+                "properties": {
+                  "title": { "type": "string", "example": "French Omelette" },
+                  "category": { "type": "string", "example": "Breakfast" },
+                  "area": { "type": "string", "example": "French" },
+                  "instructions": {
+                    "type": "string",
+                    "example": "Mix eggs and cook in a pan."
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Simple omelette recipe."
+                  },
+                  "thumb": { "type": "string", "format": "binary" },
+                  "time": { "type": "string", "example": "15 min" },
+                  "ingredients": {
+                    "type": "string",
+                    "example": "[{\"id\":\"507f1f77bcf86cd799439011\",\"measure\":\"2 pcs\"}]"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "category",
+                  "area",
+                  "instructions",
+                  "description",
+                  "thumb",
+                  "time",
+                  "ingredients"
+                ],
+                "properties": {
+                  "title": { "type": "string", "example": "French Omelette" },
+                  "category": { "type": "string", "example": "Breakfast" },
+                  "area": { "type": "string", "example": "French" },
+                  "instructions": {
+                    "type": "string",
+                    "example": "Mix eggs and cook in a pan."
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Simple omelette recipe."
+                  },
+                  "thumb": {
+                    "type": "string",
+                    "example": "https://example.com/recipe.jpg"
+                  },
+                  "time": { "type": "string", "example": "15 min" },
+                  "ingredients": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["id", "measure"],
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "example": "507f1f77bcf86cd799439011"
+                        },
+                        "measure": { "type": "string", "example": "2 pcs" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Рецепт створено" },
+          "400": { "description": "Некоректні дані рецепта" },
+          "401": { "description": "Користувач не авторизований" }
+        }
       }
     },
 

@@ -45,10 +45,25 @@ export const getAllRecipes = async (req, res) => {
 
 export const getOwnRecipes = async (req, res) => {
   const userId = req.user._id
+  const { page = 1, perPage = 12 } = req.query
+  const filter = { owner: userId }
+  const skip = (page - 1) * perPage
 
-  const recipes = await Recipe.find({ owner: userId })
+  const [totalRecipes, recipes] = await Promise.all([
+    Recipe.countDocuments(filter),
+    Recipe.find(filter)
+      .sort({ createdAt: -1, _id: -1 })
+      .skip(skip)
+      .limit(perPage),
+  ])
+
+  const totalPages = Math.ceil(totalRecipes / perPage)
 
   res.status(200).json({
+    page,
+    perPage,
+    totalRecipes,
+    totalPages,
     recipes,
   })
 }

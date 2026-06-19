@@ -46,7 +46,7 @@ const recipeSchema = new Schema(
     },
     thumb: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     time: {

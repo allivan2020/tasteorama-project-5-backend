@@ -68,38 +68,40 @@ export const getRecipeById = async (req, res) => {
 }
 
 export const createOwnRecipe = async (req, res) => {
-  const owner = req.user._id
-
-  if (!req.body || Object.keys(req.body).length === 0) {
-    return res.status(400).json({
-      message: 'Recipe data is required',
-    })
-  }
+  const owner = req.user._id;
 
   try {
+    const { title, category, instructions, description, time, ingredients, cals } = req.body;
+
     const recipeData = {
-      ...req.body,
+      title,
+      category,
+      instructions,
+      description,
+      time,
+      ingredients: typeof ingredients === 'string' ? JSON.parse(ingredients) : ingredients,
       owner,
-    }
+      cals,
+    };
 
     if (req.file) {
-      const result = await uploadRecipeToCloudinary(req.file.buffer)
-      recipeData.thumb = result.secure_url
+      const result = await uploadRecipeToCloudinary(req.file.buffer);
+      recipeData.thumb = result.secure_url;
+    } else {
+      return res.status(400).json({ message: "Image is required" });
     }
 
-    const recipe = await Recipe.create(recipeData)
+    const recipe = await Recipe.create(recipeData);
 
-    res.status(201).json(recipe)
+    res.status(201).json(recipe);
   } catch (error) {
     if (error.name === 'ValidationError') {
-      return res.status(400).json({
-        message: error.message,
-      })
+      return res.status(400).json({ message: error.message });
     }
-
-    throw error
+    console.error("Server Error:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
 
 export const getFavoriteRecipes = async (req, res) => {
   const userId = req.user._id

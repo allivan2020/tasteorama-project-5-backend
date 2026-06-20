@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://tasteorama-project-5-backend.onrender.com/api/$1"
+    }
+  ]
+}

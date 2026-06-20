@@ -10,7 +10,10 @@ export const getAllRecipes = async (req, res) => {
   const skip = (page - 1) * perPage
 
   if (category) {
-    filter.category = category
+    filter.category = {
+      $regex: category,
+      $options: 'i',
+    }
   }
 
   if (ingredient) {

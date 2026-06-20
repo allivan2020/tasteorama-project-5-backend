@@ -25,7 +25,7 @@ export const createOwnRecipeSchema = {
     description: Joi.string().trim().required(),
     thumb: Joi.string().trim().optional(),
     time: Joi.string().trim().required(),
-    cals: Joi.string().trim().optional(),
+    calories: Joi.number().min(0).max(10000).optional(),
     ingredients: Joi.array()
       .items(
         Joi.object({

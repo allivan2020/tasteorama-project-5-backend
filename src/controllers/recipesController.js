@@ -82,7 +82,26 @@ export const getRecipeById = async (req, res) => {
     })
   }
 
-  res.status(200).json(recipe)
+  const ingredientIds = recipe.ingredients.map((item) => item.id)
+
+  const ingredients = await Ingredient.find({
+    _id: { $in: ingredientIds },
+  })
+
+  const ingredientsMap = new Map(
+    ingredients.map((item) => [item._id, item.name]),
+  )
+
+  const recipeWithIngredientsNames = {
+    ...recipe.toObject(),
+    ingredients: recipe.ingredients.map((item) => ({
+      id: item.id,
+      name: ingredientsMap.get(item.id) ?? '',
+      measure: item.measure,
+    })),
+  }
+
+  res.status(200).json(recipeWithIngredientsNames)
 }
 
 export const createOwnRecipe = async (req, res) => {

@@ -21,6 +21,7 @@ export const createOwnRecipeSchema = {
   [Segments.BODY]: Joi.object({
     title: Joi.string().trim().required(),
     category: Joi.string().trim().required(),
+    area: Joi.string().trim().optional(),
     instructions: Joi.string().trim().required(),
     description: Joi.string().trim().required(),
     thumb: Joi.string().trim().optional(),

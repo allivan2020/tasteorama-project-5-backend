@@ -26,6 +26,7 @@ const app = express()
 
 app.use(helmetConfig)
 app.use(express.json())
+app.set('trust proxy', 1)
 app.use(
   cors({
     origin: [

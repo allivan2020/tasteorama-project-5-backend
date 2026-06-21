@@ -148,34 +148,47 @@ export const createOwnRecipe = async (req, res) => {
 
 export const getFavoriteRecipes = async (req, res) => {
   const userId = req.user._id
-  const user = await User.findById(userId).populate('favorites')
+  const { category, ingredient, page = 1, perPage = 12 } = req.query
+  const user = await User.findById(userId)
   if (!user) {
     return res.status(404).json({
       message: 'User not found',
     })
   }
-
-  const { category, ingredient } = req.query
-  let recipes = user.favorites || []
-
+  const skip = (page - 1) * perPage
+  const filter = {
+    _id: { $in: user.favorites },
+  }
   if (category) {
-    recipes = recipes.filter((recipe) => recipe.category === category)
+    filter.category = {
+      $regex: category,
+      $options: 'i',
+    }
   }
 
   if (ingredient) {
-    const foundIngredients = await Ingredient.find({
+    const foundIngredient = await Ingredient.find({
       name: { $regex: ingredient, $options: 'i' },
     }).select('_id')
 
-    const ingredientIds = foundIngredients.map((i) => i._id)
-
-    recipes = recipes.filter((recipe) =>
-      recipe.ingredients.some((item) => ingredientIds.includes(item.id)),
-    )
+    filter['ingredients.id'] = {
+      $in: foundIngredient.map((item) => item._id),
+    }
   }
 
+  const [totalRecipes, recipes] = await Promise.all([
+    Recipe.countDocuments(filter),
+    Recipe.find(filter)
+      .skip(skip)
+      .limit(perPage),
+  ])
+
   res.status(200).json({
-    recipes
+    page: Number(page),
+    perPage: Number(perPage),
+    totalRecipes,
+    totalPages: Math.ceil(totalRecipes / perPage),
+    recipes,
   })
 }
 export const addFavoriteRecipes = async (req, res) => {

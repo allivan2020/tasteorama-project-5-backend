@@ -9,6 +9,7 @@ import {
   getOwnRecipes,
   deleteFavoriteRecipes,
   addFavoriteRecipes,
+  deleteOwnRecipe,
 } from '../controllers/recipesController.js'
 
 import {
@@ -60,5 +61,10 @@ router.delete(
   isValidId,
   ctrlWrapper(deleteFavoriteRecipes),
 )
-
+router.delete(
+  '/:id',
+  authenticate,
+  isValidId,
+  ctrlWrapper(deleteOwnRecipe),
+)
 export default router

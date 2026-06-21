@@ -54,6 +54,11 @@ const recipeSchema = new Schema(
       required: true,
       trim: true,
     },
+    calories: {
+      type: Number,
+      min: 0,
+      required: false,
+    },
     cals: {
       type: String,
       required: false,
@@ -67,8 +72,32 @@ const recipeSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
+    toJSON: {
+      transform: normalizeLegacyCalories,
+    },
+    toObject: {
+      transform: normalizeLegacyCalories,
+    },
   },
 )
+
+function normalizeLegacyCalories(_document, recipe) {
+  if (
+    recipe.calories == null &&
+    recipe.cals != null &&
+    recipe.cals.trim() !== ''
+  ) {
+    const legacyCalories = Number(recipe.cals)
+
+    if (Number.isFinite(legacyCalories)) {
+      recipe.calories = legacyCalories
+    }
+  }
+
+  delete recipe.cals
+
+  return recipe
+}
 
 recipeSchema.index({ title: 1, category: 1 })
 

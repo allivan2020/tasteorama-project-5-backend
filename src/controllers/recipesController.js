@@ -108,7 +108,15 @@ export const createOwnRecipe = async (req, res) => {
   const owner = req.user._id;
 
   try {
-    const { title, category, instructions, description, time, ingredients, cals } = req.body;
+    const {
+      title,
+      category,
+      instructions,
+      description,
+      time,
+      ingredients,
+      calories,
+    } = req.body;
 
     const recipeData = {
       title,
@@ -118,7 +126,7 @@ export const createOwnRecipe = async (req, res) => {
       time,
       ingredients: typeof ingredients === 'string' ? JSON.parse(ingredients) : ingredients,
       owner,
-      cals,
+      calories,
     };
 
     if (req.file) {

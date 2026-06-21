@@ -276,6 +276,12 @@
                   },
                   "thumb": { "type": "string", "format": "binary" },
                   "time": { "type": "string", "example": "15 min" },
+                  "calories": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000,
+                    "example": 150
+                  },
                   "ingredients": {
                     "type": "string",
                     "example": "[{\"id\":\"507f1f77bcf86cd799439011\",\"measure\":\"2 pcs\"}]"
@@ -313,6 +319,12 @@
                     "example": "https://example.com/recipe.jpg"
                   },
                   "time": { "type": "string", "example": "15 min" },
+                  "calories": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10000,
+                    "example": 150
+                  },
                   "ingredients": {
                     "type": "array",
                     "items": {
